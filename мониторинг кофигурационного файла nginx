@@ -1,0 +1,5 @@
+#!/bin/bash
+if nginx -t 2>&1 | grep 'test is successful' > /dev/null
+then echo 0
+else echo 1
+fi
