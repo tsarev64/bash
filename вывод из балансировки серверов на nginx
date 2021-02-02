@@ -1,0 +1,97 @@
+#!/bin/bash
+# Вывод из балансировки приклада в ручном режиме.
+#Переменные
+#для меню
+v="\e[34mВведите пункт меню и подтвердите действие клавишей 'Enter':\e[0m"
+#Для бесконечного цикла, чтобы после выбора пункта меню, скрипт опять запускался
+x=0
+#подставляется дата в конце bkp файла
+date=$(date +%Y%m%d)
+#Вывод при неуспешности действия
+fail="\e[31mЧто-то пошло не так.\e[0m"
+#Вывод об успешном действии
+complete="\e[33mComplete.\e[0m"
+#WARNING ВНИМАНИЕ Если меняется расположение конфиг файла, поправить нужно только тут.
+#Расположение конфигурационного файла nginx
+path=/etc/nginx/conf.d/
+#Вывод о производимом действии
+head="\e[33mВывожу из балансировки и перечитываю настройки для nginx.\e[0m"
+head1="\e[33mВвожу в балансировку и перечитываю настройки для nginx.\e[0m"
+#WARNING ВНИМАНИЕ тут правим если меняется имя хоста
+#Имя сервера
+#Для внутренней  
+#Для внешней 
+s1=
+#Имя сервера
+#Для внутренней 
+#Для внешней 
+s2=
+#Делаем bkp конфигурационного файла nginx
+cp "$path" "$path""$date"
+#начало цикла
+while [ $x = 0 ]
+do
+#Вывод пользователю списка меню
+echo -e "\e[34mДля выхода из скрипта нажмите 'CTRL+C'.\e[0m"
+echo -e "\e[34mПри первичном запуске скрипта выполняется bkp,\nв той же директории где находится конфигурационнй файл.\e[0m"
+echo -e "\e[32mВыберете необходимый пункт меню:\e[0m"
+echo -e "\e[32m1 - Вывод из балансировки ,\e[0m"
+echo -e "\e[32m2 - Вывод из балансировки ,\e[0m"
+echo -e "\e[32m3 - Выводим из балансировки ,\e[0m"
+echo -e "\e[32m4 - Вводим в балансировку ,\e[0m"
+echo -e "\e[32m5 - Вводим в балансировку ,\e[0m"
+echo -e "\e[32m6 - Вводим в балансировку .\e[0m"
+#ожидаем выбор пользовтеля
+read choice
+if [[ $choice = 1 ]]
+then
+echo -e "$head"
+if sed -i -e 's/server '"$s1"':443;/server '"$s1"':443 down;/g' "$path"
+then sudo systemctl reload nginx && echo -e "$complete" && head -n 3 "$path"
+else echo -e "$fail" || exit 1
+fi
+elif [[ $choice = 2 ]]
+then
+echo -e "$head"
+if sed -i -e 's/server '"$s2"':443;/server '"$s2"':443 down;/g' "$path"
+then sudo systemctl reload nginx && echo -e "$complete" && head -n 3 "$path"
+else echo -e "$fail" || exit 1
+fi
+elif [[ $choice = 3 ]]
+then
+echo -e "$head"
+if while grep "server "$s1":443;" "$path"
+do
+sed -i -e 's/server '"$s1"':443;/server '"$s1"':443 down;/g' "$path"
+sed -i -e 's/server '"$s2"':443;/server '"$s2"':443 down;/g' "$path"
+done
+then sudo systemctl reload nginx && echo -e "$complete" && head -n 3 "$path"
+else echo -e "$fail" || exit 1
+fi
+elif [[ $choice = 4 ]]
+then
+echo -e "$head1"
+if sed -i -e 's/server '"$s1"':443 down;/server '"$s1"':443;/g' "$path"
+then sudo systemctl reload nginx && echo -e "$complete" && head -n 3 "$path"
+else echo -e "$fail" || exit 1
+fi
+elif [[ $choice = 5 ]]
+then
+echo -e "$head1"
+if sed -i -e 's/server '"$s2"':443 down;/server '"$s2"':443;/g' "$path"
+then sudo systemctl reload nginx && echo -e "$complete" && head -n 3 "$path"
+else echo -e "$fail" || exit 1
+fi
+elif [[ $choice = 6 ]]
+then
+echo -e "$head1"
+if while grep "server "$s1":443 down;" "$path"
+do
+sed -i -e 's/server '"$s1"':443 down;/server '"$s1"':443;/g' "$path"
+sed -i -e 's/server '"$s2"':443 down;/server '"$s2"':443;/g' "$path"
+done
+then sudo systemctl reload nginx && echo -e "$complete" && head -n 3 "$path"
+else echo -e "$fail" || exit 1
+fi
+fi
+done
