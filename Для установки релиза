@@ -1,0 +1,568 @@
+#!/bin/bash
+#Установка релиза.
+#Данный скрипт предназначен для упрощения релизных установок.
+
+x=0
+while [ $x = 0 ]
+do
+#Задаем переменные для скрипта.
+#переменная для бесконечного цикла x=0
+#переменная содержащая текущую дату, можно подставить при создании каталога или файла
+newdir=$(date +%d%m%Y)
+#Отмена действия
+fail="\e[31m Выполнение действия прекращено переходим к следующему шагу.\e[0m"
+#Уведомление о успешном создание каталога
+create="\e[32mКаталог создан с текущей датой.\e[0m"
+#Уведомление о успешном копирование
+copy="\e[32mКопирование завершено.\e[0m"
+#Уведомление о успешной очистке каталога
+clear="\e[32mКаталог очищен.\e[0m"
+#Вывод пользователю с подтверждением действия
+yes="\e[33m0 - Да,\e[0m"
+#Вывод пользователю с предложением отказаться от выполнения действия
+no="\e[33m1 - Пропустить шаг.\e[0m"
+#Уведомление о возврате в меню при ошибке
+back="\e[31mКоманда не выполнена, возврат в меню.\e[0m"
+#Уведомление о возврате в меню
+backmenu="\e[33m1 - Возврат в меню\e[0m"
+#Вывод пользователю с рекомендациями к действию
+v="\e[34mВведите пункт меню, для подтверждения ввода нажмите 'ENTER':\e[0m"
+#Menu
+#Предлагаем пользователю выбор действий
+#0-запускает выполнение всего скрипта с подтверждением действий
+#1-20 Выполнить 1 действие соответствующее названию меню, с подтверждением.
+echo -e "\e[34mВыберете пункт меню. Для выхода нажмите 'CTRL+c'\e[0m"
+echo -e "\e[42mMenu\e[0m"
+echo -e "\e[32m0 - Запустить скрипт в интерактивном режиме.\e[0m"
+echo -e "\e[32m1 - Создание каталога для хранения bkp.\e[0m"
+echo -e "\e[32m2 - Делаем bkp \e[0m"
+echo -e "\e[32m3 - Делаем bkp \e[0m"
+echo -e "\e[32m4 - Делаем bkp \e[0m"
+echo -e "\e[32m5 - Проверить результаты bkp.\e[0m"
+echo -e "\e[32m6 - Останавить приложение .\e[0m"
+echo -e "\e[32m7 - Очистить каталог .\e[0m"
+echo -e "\e[32m8 - Очистить каталог .\e[0m"
+echo -e "\e[32m9 - Очистить каталог .\e[0m"
+echo -e "\e[32m10 - Копируем файл из поставки .\e[0m"
+echo -e "\e[32m11 - Меняем права на скопированный файл .\e[0m"
+echo -e "\e[32m12 - Копируем setenv на внешнюю .\e[0m"
+echo -e "\e[32m13 - Копируем setenv на внешнюю .\e[0m"
+echo -e "\e[32m14 - Копируем файл конфигурации.\e[0m"
+echo -e "\e[32m15 - Делаем владельцем  ТУЗ .\e[0m"
+echo -e "\e[32m16 - Применяем настройки .\e[0m"
+echo -e "\e[32m17 - Запускаем .\e[0m"
+echo -e "\e[32m18 - Заменяем файл конфигурации логирования.\e[0m"
+echo -e "\e[32m19 - Открыть catalina.out.\e[0m"
+echo -e "\e[32m20 - Открыть логи сервиса .\e[0m"
+#Ожидаем ввода выбранного пункта меню
+read choice
+#Выполняем весь скрипт в интерактивном режиме
+if [[ $choice = 0 ]]
+then
+echo -e "\e[32mСоздать каталог для хранения bkp?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+mkdir /opt/backup/$newdir && echo -e "create"
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+echo -e "\e[32mДелаем bkp ?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+cp -R /opt/ /opt/backup/$newdir/ && echo -e "$copy"
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+
+echo -e "\e[32mДелаем bkp .sh?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+cp -R /opt/ /opt/backup/$newdir/ && echo -e "$copy"
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+
+echo -e "\e[32mДелаем bkp .ldif?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+cp -R /opt/ /opt/backup/$newdir/ && echo -e "$copy"
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+
+echo -e "\e[32mПроверить результаты bkp?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+ls -la /opt/backup/$newdir/
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+echo -e "\e[32mОстанавить приложение ?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+sudo systemctl stop  && systemctl status 
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+
+echo -e "\e[32mОчистить каталог ?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+rm -rf /opt/* && echo -e "$clear" && ls -la /opt/
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+
+echo -e "\e[32mОчистить ?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+rm -rf /opt/* && echo -e "$clear" && ls -la /opt/
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+
+echo -e "\e[32mОчистить каталог ?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+rm -rf /opt/* && echo -e "$clear" && ls -la /opt/
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+
+echo -e "\e[32mКопируем файл из поставки ?\e[0m"
+echo -e "\e[31mВнимание!\e[0m"
+echo -e "\e[31mВ каталоге tmp должен быть один файл с расширением .\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+find /tmp/ -name "*.war" -exec cp '{}' /opt/ \; && ls -la /opt/
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+echo -e "\e[32mМеняем права на скопированный файл ?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+chmod o+x+r /opt/ && ls -la /opt/
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+
+echo -e "\e[31mВнимание!\e[0m"
+echo -e "\e[32mКопируем  на внешнюю ?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+find /tmp/ -name '*.DMZ.*' -exec cp '{}' /opt/ \;
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+
+echo -e "\e[31mВнимание!\e[0m"
+echo -e "\e[32mКопируем  на внутреннюю ?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+find /tmp/ -name '*.LAN.*' -exec cp '{}' /opt/ \;
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+
+echo -e "\e[32mКопируем файл конфигурации?\e[0m"
+echo -e "\e[31mВнимание! Копирование производится только на первом сервере.\e[0m"
+echo -e "\e[31mДля второго сервера этого делать ненужно.\e[0m"
+echo -e "\e[31mЕсли вы на втором сервере пропустите этот шаг.\e[0m"
+echo -e "\e[31mВ каталоге tmp должен быть один файл с расширением ldif.\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+find /tmp/ -name "*.ldif" -exec cp '{}' /opt/ \;
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+echo -e "\e[32mДелаем владельцем .ldif ТУЗ ?\e[0m"
+echo -e "\e[31mВнимание! Копирование производится только на первом сервере.\e[0m"
+echo -e "\e[31mДля второго сервера этого делать ненужно.\e[0m"
+echo -e "\e[31mЕсли вы на втором сервере пропустите этот шаг.\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+chown : /opt/.ldif && ls -la /opt/
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+
+echo -e "\e[32mПрименяем настройки .ldif ТУЗ ?\e[0m"
+echo -e "\e[31mВнимание! Копирование производится только на первом сервере.\e[0m"
+echo -e "\e[31mДля второго сервера этого делать ненужно.\e[0m"
+echo -e "\e[31mЕсли вы на втором сервере пропустите этот шаг.\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+
+echo -e "\e[32mЗапускаем ?\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+sudo systemctl start  && sleep 5 && systemctl status 
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+echo -e "\e[32mОжидаем запуск приклада, 30 секунд.\e[0m"
+sleep 30
+
+echo -e "\e[32mЗаменяем файл конфигурации логирования?\e[0m"
+echo -e "\e[31mВнимание!\e[0m"
+echo -e "\e[31mВ каталоге tmp должен быть один файл с расширением xml.\e[0m"
+echo -e "$yes"
+echo -e "$no"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+find /tmp/ -name "*.xml" -exec cp '{}' /opt/ \;
+else [[ $choice = 1 ]]
+echo -e "$fail" || exit 0
+fi
+echo -e "\e[32mРелизные изменения установлены.\e[0m"
+echo -e "\e[32mНеобходимо осуществить проверку функционала и вернуть сервер в балансировку.\e[0m"
+echo -e "\e[32mОткрываю catalina.out\e[0m"
+echo -e "\e[32mВывод содержимого catalina.out будет произведен на экран, все изменения будут подгружаться.\e[0m"
+sleep 10
+tail -f -n 30 /opt/catalina.out
+#Окончание работы интерактивного скрипта
+#Начало работы пунктов меню
+elif [[ $choice = 1 ]]
+then
+echo -e "\e[32mСоздать каталог для хранения bkp?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+mkdir /opt/backup/$newdir && echo -e "create"
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+
+elif [[ $choice = 2 ]]
+then
+echo -e "\e[32mДелаем bkp ?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+cp -R /opt/ /opt/backup/$newdir/ && echo -e "$copy"
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+elif [[ $choice = 3 ]]
+then
+echo -e "\e[32mДелаем bkp ?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+cp -R /opt/ /opt/backup/$newdir/ && echo -e "$copy"
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+
+elif [[ $choice = 4 ]]
+then
+echo -e "\e[32mДелаем bkp .ldif?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+cp -R /opt/.ldif /opt/backup/$newdir/ && echo -e "$copy"
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+
+elif [[ $choice = 5 ]]
+then
+echo -e "\e[32mПроверить результаты bkp?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+ls -la /opt/backup/$newdir/
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+
+elif [[ $choice = 6 ]]
+then
+echo -e "\e[32mОстанавить приложение ?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+sudo systemctl stop  && systemctl status 
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+elif [[ $choice = 7 ]]
+then
+echo -e "\e[32mОчистить каталог ?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+rm -rf /opt/* && echo -e "$clear" && ls -la /opt/
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+
+elif [[ $choice = 8 ]]
+then
+echo -e "\e[32mОчистить каталог ?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+rm -rf /opt/* && echo -e "$clear" && ls -la /opt/
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+
+elif [[ $choice = 9 ]]
+then
+echo -e "\e[32mОчистить каталог ?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+rm -rf /opt/* && echo -e "$clear" && ls -la /opt/
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+
+elif [[ $choice = 10 ]]
+then
+echo -e "\e[32mКопируем файл из поставки ?\e[0m"
+echo -e "\e[31mВнимание!\e[0m"
+echo -e "\e[31mВ каталоге tmp должен быть один файл с расширением .\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+find /tmp/ -name "*.war" -exec cp '{}' /opt/ \; && ls -la /opt/
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+elif [[ $choice = 11 ]]
+then
+echo -e "\e[32mМеняем права на скопированный файл ?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+chmod o+x+r /opt/ && ls -la /opt/
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+
+elif [[ $choice = 12 ]]
+then
+echo -e "\e[31mВнимание!\e[0m"
+echo -e "\e[32mКопируем  на внешнюю ?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+find /tmp/ -name '*.DMZ.*' -exec cp '{}' /opt/ \;
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+
+elif [[ $choice = 13 ]]
+then
+echo -e "\e[31mВнимание!\e[0m"
+echo -e "\e[32mКопируем  на внутреннюю ?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+find /tmp/ -name '*.LAN.*' -exec cp '{}' /opt/ \;
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+
+elif [[ $choice = 14 ]]
+then
+echo -e "\e[32mКопируем файл конфигурации?\e[0m"
+echo -e "\e[31mВнимание! Копирование производится только на первом сервере.\e[0m"
+echo -e "\e[31mДля второго сервера этого делать ненужно.\e[0m"
+echo -e "\e[31mЕсли вы на втором сервере пропустите этот шаг.\e[0m"
+echo -e "\e[31mВ каталоге tmp должен быть один файл с расширением ldif.\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+find /tmp/ -name "*.ldif" -exec cp '{}' /opt \;
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+elif [[ $choice = 15 ]]
+then
+echo -e "\e[32mДелаем владельцем .ldif ТУЗ ?\e[0m"
+echo -e "\e[31mВнимание! Копирование производится только на первом сервере.\e[0m"
+echo -e "\e[31mДля второго сервера этого делать ненужно.\e[0m"
+echo -e "\e[31mЕсли вы на втором сервере пропустите этот шаг.\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+chown : /opt/ && ls -la /opt/
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+
+elif [[ $choice = 16 ]]
+then
+echo -e "\e[32mДелаем владельцем .ldif ТУЗ ?\e[0m"
+echo -e "\e[31mВнимание! Копирование производится только на первом сервере.\e[0m"
+echo -e "\e[31mДля второго сервера этого делать ненужно.\e[0m"
+echo -e "\e[31mЕсли вы на втором сервере пропустите этот шаг.\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+elif [[ $choice = 17 ]]
+then
+echo -e "\e[32mЗапускаем openAM?\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+sudo systemctl start  && sleep 5 && systemctl status 
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+
+elif [[ $choice = 18 ]]
+then
+echo -e "\e[32mЗаменяем файл конфигурации логирования?\e[0m"
+echo -e "\e[31mВнимание!\e[0m"
+echo -e "\e[31mВ каталоге tmp должен быть один файл с расширением xml.\e[0m"
+echo -e "$yes"
+echo -e "$backmenu"
+echo -en "$v"
+read choice
+if [[ $choice = 0 ]]
+then
+find /tmp/ -name "*.xml" -exec cp '{}' /opt/ \;
+else [[ $choice = 1 ]]
+echo -e "$back" || exit 0
+fi
+elif [[ $choice = 19 ]]
+then
+tail -f -n 50 /opt/catalina.out
+elif [[ $choice = 20 ]]
+then
+tail -f -n 50 /opt/
+fi
+done
