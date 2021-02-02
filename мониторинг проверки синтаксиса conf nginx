@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 if nginx -t 2>&1 | grep 'syntax is ok' > /dev/null
 then echo 0
 else echo 1
