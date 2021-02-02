@@ -2,32 +2,32 @@
 #!/bin/bash
 # Find word from log files
 echo Выберете где будем искать:
-echo 1-/opt/openam/logs/
-echo 2-/opt/opendj/logs/
-echo 3-поиск по архивам /opt/openam/logs/
-#echo 4-поиск по архивам /opt/opendj/logs/
+echo 1-/opt/
+echo 2-/opt/
+echo 3-поиск по архивам /opt/
+#echo 4-поиск по архивам /opt/
 read choice
 if [[ $choice = 1 ]]
 then
 echo Введите слово или выражение, по которому необходимо осуществить поиск:
 echo Результат поиска будет сохранен в /tmp/find_result_openam.txt
 read word_find
-grep -rin --include '*.log' "$word_find" /opt/openam/logs/ > /tmp/find_result_openam.txt
+grep -rin --include '*.log' "$word_find" /opt/ > /tmp/find_result.txt
 elif [[ $choice = 2 ]]
 then
 echo Введите слово или выражение, по которому необходимо осуществить поиск:
-echo Результат поиска будет сохранен в /tmp/find_result_opendj.txt
+echo Результат поиска будет сохранен в /tmp/find_result.txt
 read word_find
-grep -rin --include '*.log' "$word_find" /opt/opendj/logs/ > /tmp/find_result_opendj.txt
+grep -rin --include '*.log' "$word_find" /opt/ > /tmp/find_result_opendj.txt
 elif [[ $choice = 3 ]]
 then
 echo Введите слово или выражение, по которому необходимо осуществить поиск:
-echo Результат поиска будет сохранен в /tmp/find_result_openam.txt
+echo Результат поиска будет сохранен в /tmp/find_result.txt
 read word_find
-zgrep "$word_find" $(find /opt/openam/logs/ -name "ru.gazprombank.*.gz") > /tmp/find_result_openam.txt
+zgrep "$word_find" $(find /opt/openam/logs/ -name "fddffd*.gz") > /tmp/find_result.txt
 #elif [[ $choice = 4 ]]
 #then
 # echo Введите слово или выражение, по которому необходимо осуществить поиск:
 # echo Результат поиска будет сохранен в /tmp/find_result_opendj.txt
-# zgrep "$word_find" $(find /opt/opendj/logs/ -name "ru.gazprombank.*.gz")
+# zgrep "$word_find" $(find /opt/opendj/logs/ -name "fdfddf*.gz")
 fi
