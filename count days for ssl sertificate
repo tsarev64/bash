@@ -1,0 +1,15 @@
+#!/bin/bash
+
+variable=0
+timestamp=`echo | date`
+expire_date=`openssl s_client -connect localhost:443 -tlsextdebug 2>/dev/null | openssl x509 -noout -dates 2>/dev/null | grep notAfter | cut -d'=' -f2`
+expire_secs=`date -d "${expire_date}" +%s`
+expire_time=$(( ${expire_secs} - `date +%s` ))
+if test $expire_time -lt 0
+then
+variable=0
+else
+variable=$(( ${expire_time} / 24 / 3600 ))
+fi
+
+echo ${variable}
